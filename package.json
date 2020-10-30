@@ -1,0 +1,23 @@
+{
+  "name": "VanillaJS_TicTacToe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panwauu/VanillaJS_TicTacToe.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/panwauu/VanillaJS_TicTacToe/issues"
+  },
+  "homepage": "https://github.com/panwauu/VanillaJS_TicTacToe#readme",
+  "devDependencies": {
+    "jest": "^26.6.1"
+  }
+}
