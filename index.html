@@ -6,7 +6,7 @@
         <title>Tic Tac Toe</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="style.css">
-        <script src="script.js" defer></script>
+        <script type="module" src="script.js" defer></script>
     </head>
     <body>
         <div class="board x" id="board">
@@ -19,6 +19,11 @@
             <div class="cell" id="6" data-cell></div>
             <div class="cell" id="7" data-cell></div>
             <div class="cell" id="8" data-cell></div>
+        </div>
+        <div class="winning-message show" id="winningMessage">
+            <div data-winning-message-text>Start Game</div>
+            <button id="restartButtonOne">One Player Mode</button>
+            <button id="restartButtonTwo">Two Player Mode</button>
         </div>
     </body>
 </html>

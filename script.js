@@ -1,11 +1,40 @@
+import { miniMaxMove } from './minimax.js';
+
 let gameboard = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
 const X_CLASS = 'x'
 const O_CLASS = 'o'
 const cellElements = document.querySelectorAll('[data-cell]')
 const htmlBoard = document.getElementById('board')
+const winningMessageElement = document.getElementById('winningMessage')
+const restartButtonOne = document.getElementById('restartButtonOne')
+const restartButtonTwo = document.getElementById('restartButtonTwo')
+const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
 let oTurn = true
+let computerTurn = 2
 
-drawBoard(gameboard)
+restartButtonOne.addEventListener('click', startGameOne)
+restartButtonTwo.addEventListener('click', startGameTwo)
+
+function startGameOne() {
+    oTurn = Math.random() >= 0.5;
+    computerTurn = Math.round(Math.random())
+    restartGame()
+    if ((oTurn === true && computerTurn === 0) || (oTurn === false && computerTurn === 1)) {
+        processNewInput(miniMaxMove(gameboard))
+    }
+}
+
+function startGameTwo() {
+    oTurn = Math.random() >= 0.5;
+    computerTurn = 2
+    restartGame()
+}
+
+function restartGame() {
+    winningMessageElement.classList.remove('show')
+    gameboard = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
+    drawBoard(gameboard)
+}
 
 function drawBoard(board) {
     // Draw Cells
@@ -40,13 +69,19 @@ function drawBoard(board) {
 function handleClick(e) {
     const cell = e.target
     const i = cell.id
+    processNewInput(i)
+    if (computerTurn !== 2 && checkWin(gameboard) < 0) {
+        processNewInput(miniMaxMove(gameboard))
+    }
+}
+
+function processNewInput(cellNumber) {
     const newClass = oTurn ? 0 : 1
-    setBoard(gameboard, i, newClass)
+    setBoard(gameboard, cellNumber, newClass)
     oTurn = !oTurn
     drawBoard(gameboard)
     if (checkWin(gameboard) >= 0) {
-        disableBoard()
-        restartGame()
+        endGame()
     }
 }
 
@@ -59,7 +94,7 @@ function getBoard(board, i) {
     return (board[Math.floor(i / 3)][i % 3])
 }
 
-function checkWin(board) {
+export function checkWin(board) {
     for (var i = 0; i < 3; i++) {
         if (board[i][0] === board[i][1] && board[i][1] === board[i][2] && board[i][0] !== -1) { return board[i][0] }
         if (board[0][i] === board[1][i] && board[1][i] === board[2][i] && board[0][i] !== -1) { return board[0][i] }
@@ -76,18 +111,37 @@ function checkWin(board) {
     return 2
 }
 
-function disableBoard() {
+function endGameMessage(winner) {
+    let text = ''
+
+    if (winner === 2) {
+        text = "Draw!"
+    }
+    else if (computerTurn !== 2) {
+        if (computerTurn === winner) {
+            text = "You lost!"
+        }
+        else {
+            text = "You won!"
+        }
+    }
+    else {
+        if (winner === 0) {
+            text = "O won!"
+        }
+        else {
+            text = "X won!"
+        }
+    }
+
+    return text
+}
+
+function endGame() {
     for (let i = 0; i < cellElements.length; i++) {
         let cell = cellElements[i]
         cell.removeEventListener('click', handleClick)
     }
-}
-
-function restartGame() {
-    gameboard = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
-    drawBoard(gameboard)
-}
-
-if (typeof exports !== 'undefined') {
-    module.exports = checkWin;
+    winningMessageElement.classList.add('show')
+    winningMessageTextElement.innerText = endGameMessage(checkWin(gameboard))
 }
