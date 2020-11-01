@@ -3,24 +3,33 @@ import { miniMaxMove } from './minimax.js';
 let gameboard = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
 const X_CLASS = 'x'
 const O_CLASS = 'o'
-const cellElements = document.querySelectorAll('[data-cell]')
-const htmlBoard = document.getElementById('board')
-const winningMessageElement = document.getElementById('winningMessage')
-const restartButtonOne = document.getElementById('restartButtonOne')
-const restartButtonTwo = document.getElementById('restartButtonTwo')
-const winningMessageTextElement = document.querySelector('[data-winning-message-text]')
+let cellElements = document.querySelectorAll('[data-cell]')
+let htmlBoard = document.getElementById('board')
+let winningMessageElement = document.getElementById('winningMessage')
+let restartButtonOne = document.getElementById('restartButtonOne')
+let restartButtonTwo = document.getElementById('restartButtonTwo')
+let winningMessageTextElement = document.querySelector('[data-winning-message-text]')
 let oTurn = true
 let computerTurn = 2
 
-restartButtonOne.addEventListener('click', startGameOne)
-restartButtonTwo.addEventListener('click', startGameTwo)
+window.addEventListener('DOMContentLoaded', (event) => {
+    cellElements = document.querySelectorAll('[data-cell]')
+    htmlBoard = document.getElementById('board')
+    winningMessageElement = document.getElementById('winningMessage')
+    restartButtonOne = document.getElementById('restartButtonOne')
+    restartButtonTwo = document.getElementById('restartButtonTwo')
+    winningMessageTextElement = document.querySelector('[data-winning-message-text]')
+
+    restartButtonOne.addEventListener('click', startGameOne)
+    restartButtonTwo.addEventListener('click', startGameTwo)
+});
 
 function startGameOne() {
     oTurn = Math.random() >= 0.5;
     computerTurn = Math.round(Math.random())
     restartGame()
     if ((oTurn === true && computerTurn === 0) || (oTurn === false && computerTurn === 1)) {
-        processNewInput(miniMaxMove(gameboard))
+        processNewInput(miniMaxMove(gameboard, computerTurn))
     }
 }
 
@@ -71,7 +80,7 @@ function handleClick(e) {
     const i = cell.id
     processNewInput(i)
     if (computerTurn !== 2 && checkWin(gameboard) < 0) {
-        processNewInput(miniMaxMove(gameboard))
+        processNewInput(miniMaxMove(gameboard, computerTurn))
     }
 }
 
@@ -85,12 +94,12 @@ function processNewInput(cellNumber) {
     }
 }
 
-function setBoard(board, i, val) {
+export function setBoard(board, i, val) {
     board[Math.floor(i / 3)][i % 3] = val
     return board
 }
 
-function getBoard(board, i) {
+export function getBoard(board, i) {
     return (board[Math.floor(i / 3)][i % 3])
 }
 
